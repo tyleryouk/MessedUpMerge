@@ -1,4 +1,4 @@
-import UIKit
+/*import UIKit
 import XCTest
 
 class SpaceUpTests/*: XCTestCase */{
@@ -22,4 +22,4 @@ class SpaceUpTests/*: XCTestCase */{
         //}
     }
     
-}
+}*/
