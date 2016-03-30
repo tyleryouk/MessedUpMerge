@@ -1,20 +1,18 @@
 import SpriteKit
 import GameKit
-import iAd
 import StoreKit
 import CoreMotion
 
 // TODO: Refactor, too many responsbilities atm
-class GameViewController: UIViewController, GKGameCenterControllerDelegate, ADInterstitialAdDelegate, GameCenterManagerDelegate, GameSceneDelegate, StartSceneDelegate, SKProductsRequestDelegate, MotionDataSource {
+class GameViewController: UIViewController, GKGameCenterControllerDelegate, GameCenterManagerDelegate, GameSceneDelegate, StartSceneDelegate, SKProductsRequestDelegate, MotionDataSource {
   // MARK: - Immutable vars
   let gameCenterManager = GameCenterManager()
   let gameData = GameData.dataFromArchive()
   let motionManager = CMMotionManager()
   
   // MARK: - Vars
-  private var interstitialAdView: InterstitialAdView?
-  private var interstitialAd: ADInterstitialAd?
-  private var numberOfRetriesSinceLastAd: UInt = 0
+//  private var interstitialAdView: InterstitialAdView?
+//  private var numberOfRetriesSinceLastAd: UInt = 0
   private var products: [SKProduct]?
   private var removeAdsProduct: SKProduct?
 
@@ -32,9 +30,6 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate, ADIn
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    // iAd
-    interstitialPresentationPolicy = .Manual
     
     // Configure the view.
     // skView.showsFPS = true
@@ -245,59 +240,6 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate, ADIn
     return leaderboardViewController
   }
   
-  // MARK: - Ad
-  func prepareInterstitialAd() {
-    interstitialAd = ADInterstitialAd()
-    interstitialAd!.delegate = self
-  }
-
-  func presentInterstitialAd() -> Bool {
-    if isAdsEnabled() == false {
-      print("Ads are disabled")
-      
-      return false
-    } else if interstitialAd?.loaded != true {
-      print("Ad not loaded")
-      
-      return false
-    }
-
-    // Container view
-    interstitialAdView = InterstitialAdView(frame: skView.bounds)
-    interstitialAdView!.closeButton.addTarget(self, action: #selector(GameViewController.closeInterstitialAd), forControlEvents: .TouchUpInside)
-    skView.addSubview(interstitialAdView!)
-    
-    // Pause view
-    skView.paused = true
-    
-    // Present ad in view
-    interstitialAdView!.presentInterstitialAd(interstitialAd!)
-    
-    return true
-  }
-  
-  func closeInterstitialAd() {
-    // Clean up
-    interstitialAdView?.removeFromSuperview()
-    resetInterstitialAd()
-    
-    // Restart game
-    dispatch_async(dispatch_get_main_queue()) {
-      if let gameScene = self.skView.scene as? GameScene {
-        // Unpause view
-        self.skView.paused = false
-
-        gameScene.startGame()
-      }
-    }
-  }
-  
-  func resetInterstitialAd() {
-    interstitialAd?.delegate = nil
-    interstitialAd = nil
-    interstitialAdView = nil
-  }
-  
   // MARK: - IAP
   func presentStoreActionSheet() {
     if let removeAdsProduct = removeAdsProduct {
@@ -473,13 +415,13 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate, ADIn
   
   func gameSceneDidRequestRetry(gameScene: GameScene) {
     // Show ad or restart game
-    if numberOfRetriesSinceLastAd < MinimumNumberOfRetriesBeforePresentingAd || !presentInterstitialAd() {
-      numberOfRetriesSinceLastAd = 0
-      
+//    if numberOfRetriesSinceLastAd < MinimumNumberOfRetriesBeforePresentingAd {
+//      numberOfRetriesSinceLastAd = 0
+    
       gameScene.startGame()
-    } else {
-      numberOfRetriesSinceLastAd = 0
-    }
+//    } else {
+//      numberOfRetriesSinceLastAd = 0
+//    }
   }
   
   func gameSceneDidRequestQuit(gameScene: GameScene) {
@@ -544,27 +486,6 @@ class GameViewController: UIViewController, GKGameCenterControllerDelegate, ADIn
 
   func startSceneDidRequestToggleMusic(startScene: StartScene, withButton button: SpriteButtonNode) {
     toggleMusicForScene(startScene, withButton: button)
-  }
-  
-  // MARK: - ADInterstitialAdDelegate
-  func interstitialAdDidUnload(interstitialAd: ADInterstitialAd!) {
-    resetInterstitialAd()
-  }
-  
-  func interstitialAd(interstitialAd: ADInterstitialAd!, didFailWithError error: NSError!) {
-    resetInterstitialAd()
-    
-    print(error)
-  }
-
-  func interstitialAdDidLoad(interstitialAd: ADInterstitialAd!) {
-    print("Ad loaded")
-  }
-  
-  func interstitialAdActionDidFinish(interstitialAd: ADInterstitialAd!) {
-    if interstitialAd?.loaded == true {
-      closeInterstitialAd()
-    }
   }
   
   // MARK: - SKProductsRequestDelegate
