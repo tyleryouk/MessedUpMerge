@@ -3,7 +3,6 @@ import GameKit
 import iAd
 import StoreKit
 import CoreMotion
-import GoogleMobileAds
 
 // TODO: Refactor, too many responsbilities atm
 class GameViewController: UIViewController, GKGameCenterControllerDelegate, ADInterstitialAdDelegate, GameCenterManagerDelegate, GameSceneDelegate, StartSceneDelegate, SKProductsRequestDelegate, MotionDataSource {

@@ -1,7 +1,7 @@
 
 import SpriteKit
 import CoreMotion
-import GoogleMobileAds
+//import GoogleMobileAds //GOOGLE
 
 class GameScene: SKScene, SKPhysicsContactDelegate, WorldDelegate, ButtonDelegate, GameDataSource {
     // MARK: - Immutable var
@@ -16,7 +16,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate, WorldDelegate, ButtonDelegat
     
 
     // MARK: - Vars
-    var interstitial: GADInterstitial?
     weak var endGameView: EndGameView?
     weak var pauseMenu: PauseMenuView?
     weak var enemiesView : EnemiesView?
@@ -47,7 +46,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, WorldDelegate, ButtonDelegat
   // MARK: - View
   override func didMoveToView(view: SKView) {
     backgroundColor = UIColor(hexString: ColorHex.BackgroundColor)
-    SetupAdmob()
+    //SetupAdmob() //GOOGLE
     //self.showInformationsWhileDeveloping()
     
     // Physics
@@ -301,11 +300,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate, WorldDelegate, ButtonDelegat
     
     print("end game \(gameOverCount)");
     
-    if (gameOverCount%2 == 0)
+    /*if (gameOverCount%2 == 0)
     {
         
         showAdmobInterstitial()
-    }
+    }*/ //GOOGLE
 
   }
   
@@ -434,8 +433,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate, WorldDelegate, ButtonDelegat
   }
     
     //AdMob configration
-    
-    func SetupAdmob()  //call only first time
+     //GOOGLE
+    /*func SetupAdmob()  //call only first time
     {
         
         interstitial = GADInterstitial(adUnitID: "ca-app-pub-3608073587678030/6576466709")
@@ -455,7 +454,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate, WorldDelegate, ButtonDelegat
         }
         
         SetupAdmob()
-    }
+    }*/
     
 
 }

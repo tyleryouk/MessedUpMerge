@@ -2,12 +2,9 @@
 
 import UIKit
 import iAd
-import GoogleMobileAds
 
 class InterstitialAdView: UIView {
   let closeButton = UIButton(type: UIButtonType.Custom)
-
-  var interstitial: GADInterstitial?
     
   override init(frame: CGRect) {
     super.init(frame: frame)
