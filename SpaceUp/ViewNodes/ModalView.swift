@@ -6,13 +6,14 @@ class ModalView: SKNode {
   // MARK: - Immutable var
   let overlay: ModalOverlayNode
   let modal = SKNode()
+    
   let modalBackground: ModalBackgroundNode
 
   // MARK: - Init
   init(size: CGSize) {
     overlay = ModalOverlayNode(rectOfSize: SceneSize)
     modalBackground = ModalBackgroundNode(size: size)
-
+    
     super.init()
     
     // Layer
